@@ -1,72 +1,69 @@
-
-
 // Kelas ProdukDigital
 class ProdukDigital {
-  String namaProduk;
-  double harga;
-  String kategori;
+  String namaItem;
+  double biaya;
+  String jenis;
 
-  ProdukDigital(this.namaProduk, this.harga, this.kategori);
+  ProdukDigital(this.namaItem, this.biaya, this.jenis);
 
-  void terapkanDiskon(double persenDiskon) {
-    if (kategori == 'NetworkAutomation') {
-      harga -= harga * (persenDiskon / 100);
+  void terapkanDiskon(double persentaseDiskon) {
+    if (jenis == 'NetworkAutomation') {
+      biaya -= biaya * (persentaseDiskon / 100);
     }
   }
 }
 
 // Kelas Abstrak Karyawan
 abstract class Karyawan {
-  String nama;
-  int umur;
+  String namaPegawai;
+  int usia;
 
-  Karyawan(this.nama, this.umur);
+  Karyawan(this.namaPegawai, this.usia);
 
-  void bekerja(); // Metode abstrak
+  void lakukanPekerjaan(); // Metode abstrak
 }
 
 // Subclass KaryawanTetap
 class KaryawanTetap extends Karyawan {
-  KaryawanTetap(String nama, int umur) : super(nama, umur);
+  KaryawanTetap(String namaPegawai, int usia) : super(namaPegawai, usia);
 
   @override
-  void bekerja() {
-    print('$nama (Tetap) sedang bekerja.');
+  void lakukanPekerjaan() {
+    print('$namaPegawai (Pegawai Tetap) sedang menjalankan tugasnya.');
   }
 }
 
 // Subclass KaryawanKontrak
 class KaryawanKontrak extends Karyawan {
-  KaryawanKontrak(String nama, int umur) : super(nama, umur);
+  KaryawanKontrak(String namaPegawai, int usia) : super(namaPegawai, usia);
 
   @override
-  void bekerja() {
-    print('$nama (Kontrak) sedang bekerja.');
+  void lakukanPekerjaan() {
+    print('$namaPegawai (Pegawai Kontrak) sedang menjalankan tugasnya.');
   }
 }
 
 // Mixin Kinerja untuk Produktivitas
 mixin Kinerja {
-  int produktivitas = 0;
+  int tingkatProduktivitas = 0;
 
-  void tingkatkanProduktivitas() {
-    produktivitas += 10;
+  void naikkanProduktivitas() {
+    tingkatProduktivitas += 10;
   }
 
-  bool cekProduktivitasManager() {
-    return produktivitas > 85;
+  bool apakahProduktif() {
+    return tingkatProduktivitas > 85;
   }
 }
 
 // Menggunakan mixin pada kelas Manager
 class Manager extends Karyawan with Kinerja {
-  Manager(String nama, int umur) : super(nama, umur);
+  Manager(String namaPegawai, int usia) : super(namaPegawai, usia);
 
   @override
-  void bekerja() {
-    // Memastikan variabel produktivitas ditulis dengan benar
+  void lakukanPekerjaan() {
     print(
-        '$nama (Manager) sedang bekerja dengan produktivitas $produktivitas.');
+        '$namaPegawai (Manager) sedang bekerja dengan tingkat produktivitas $tingkatProduktivitas.');
   }
 }
 
@@ -74,38 +71,38 @@ class Manager extends Karyawan with Kinerja {
 enum FaseProyek { Perencanaan, Pengembangan, Evaluasi }
 
 class Proyek {
-  FaseProyek faseSaatIni = FaseProyek.Perencanaan;
+  FaseProyek faseSekarang = FaseProyek.Perencanaan;
 
-  void transisiFase(FaseProyek faseBaru) {
-    if (faseBaru.index == faseSaatIni.index + 1) {
-      faseSaatIni = faseBaru;
-      print('Transisi ke fase $faseBaru berhasil.');
+  void pindahKeFase(FaseProyek faseBaru) {
+    if (faseBaru.index == faseSekarang.index + 1) {
+      faseSekarang = faseBaru;
+      print('Berhasil beralih ke fase $faseBaru.');
     } else {
-      print('Transisi tidak valid.');
+      print('Transisi ke fase ini tidak diperbolehkan.');
     }
   }
 }
 
 // Kelas Perusahaan untuk Pembatasan Jumlah Karyawan Aktif
 class Perusahaan {
-  List<Karyawan> karyawanAktif = [];
-  List<Karyawan> karyawanNonAktif = [];
-  final int batasMaksimal = 20;
+  List<Karyawan> pegawaiAktif = [];
+  List<Karyawan> pegawaiNonAktif = [];
+  final int kapasitasMaksimal = 20;
 
-  void tambahKaryawan(Karyawan karyawan) {
-    if (karyawanAktif.length < batasMaksimal) {
-      karyawanAktif.add(karyawan);
-      print('Karyawan ${karyawan.nama} berhasil ditambahkan.');
+  void rekrutPegawai(Karyawan pegawai) {
+    if (pegawaiAktif.length < kapasitasMaksimal) {
+      pegawaiAktif.add(pegawai);
+      print('Pegawai ${pegawai.namaPegawai} berhasil direkrut.');
     } else {
-      print('Batas maksimal karyawan aktif tercapai.');
+      print('Kapasitas maksimal pegawai aktif telah terpenuhi.');
     }
   }
 
-  void resignKaryawan(Karyawan karyawan) {
-    karyawanAktif.remove(karyawan);
-    karyawanNonAktif.add(karyawan);
+  void keluarkanPegawai(Karyawan pegawai) {
+    pegawaiAktif.remove(pegawai);
+    pegawaiNonAktif.add(pegawai);
     print(
-        'Karyawan ${karyawan.nama} telah resign dan dipindahkan ke daftar non-aktif.');
+        'Pegawai ${pegawai.namaPegawai} telah keluar dan dipindahkan ke daftar pegawai non-aktif.');
   }
 }
 
@@ -114,29 +111,29 @@ void main() {
   // ProdukDigital
   var produk = ProdukDigital('Automasi Jaringan', 5000000, 'NetworkAutomation');
   produk.terapkanDiskon(10);
-  print('Harga setelah diskon: ${produk.harga}');
+  print('Biaya setelah diskon: ${produk.biaya}');
 
   // Karyawan dan Manager
   var karyawanTetap = KaryawanTetap('Puput', 30);
-  karyawanTetap.bekerja();
+  karyawanTetap.lakukanPekerjaan();
 
   var karyawanKontrak = KaryawanKontrak('Haydar', 25);
-  karyawanKontrak.bekerja();
+  karyawanKontrak.lakukanPekerjaan();
 
   var manager = Manager('Luki', 40);
-  manager.bekerja();
-  manager.tingkatkanProduktivitas();
-  print('Produktivitas Manager: ${manager.produktivitas}');
+  manager.lakukanPekerjaan();
+  manager.naikkanProduktivitas();
+  print('Tingkat produktivitas Manager: ${manager.tingkatProduktivitas}');
 
   // FaseProyek
   var proyek = Proyek();
-  proyek.transisiFase(FaseProyek.Pengembangan);
-  proyek.transisiFase(FaseProyek.Evaluasi);
+  proyek.pindahKeFase(FaseProyek.Pengembangan);
+  proyek.pindahKeFase(FaseProyek.Evaluasi);
 
   // Perusahaan
   var perusahaan = Perusahaan();
-  perusahaan.tambahKaryawan(karyawanTetap);
-  perusahaan.tambahKaryawan(karyawanKontrak);
-  perusahaan.tambahKaryawan(manager);
-  perusahaan.resignKaryawan(karyawanTetap);
+  perusahaan.rekrutPegawai(karyawanTetap);
+  perusahaan.rekrutPegawai(karyawanKontrak);
+  perusahaan.rekrutPegawai(manager);
+  perusahaan.keluarkanPegawai(karyawanTetap);
 }
